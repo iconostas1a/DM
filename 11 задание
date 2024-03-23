@@ -1,0 +1,56 @@
+# код для поиска MST
+
+
+#include <iostream>
+#include <vector>
+#include <queue>
+
+
+void prim(std::vector<std::vector<std::pair<int, int>>>& graph, int v) {
+
+        std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<>> q; // для хранения инцедентных ребер
+        std::vector<int> dist(graph.size(), INT_MAX);
+        std::vector<bool> visited(graph.size(), false);
+        std::vector<int> parent(graph.size(), -1);
+
+        q.emplace(v, 0); // vert weight
+        dist[v] = 0;
+
+        while (!q.empty()) {
+            int a = q.top().first;
+            q.pop();
+
+            if (!visited[a]) {
+                visited[a] = true;
+                if (parent[a] != -1) {
+                    std::cout << parent[a] << " - " << a << '\n';
+                }
+            }
+
+            for (auto &i : graph[a]) {
+                int b = i.first;
+                int weight = i.second;
+
+                if (!visited[b] and weight < dist[b]) {
+                    dist[b] = weight;
+                    parent[b] = a;
+                    q.emplace(b, dist[b]);
+                }
+            }
+
+        }
+
+}
+
+int main() {
+    int n, m;
+    std::cin >> n >> m;
+    std::vector<std::vector<std::pair<int, int>>> graph(n);
+    for (int i = 0; i < m; ++i) {
+        int a, b, weight;
+        std::cin >> a >> b >> weight;
+        graph[a].emplace_back(b, weight);
+        graph[b].emplace_back(a, weight);
+    }
+    prim(graph, 0);
+}
