@@ -1,0 +1,44 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+// запускаем бфс 49 раз(число вершин) и записываем расстояние в матрицу
+void bfs(std::vector<std::vector<int>>& graph) {
+    
+    std::vector<std::vector<int>> dist(49, std::vector<int>(49, -1)); // матрица 49 х 49 для записи кратчайших расстояний 
+
+    for (int i = 0; i < 49; ++i) {
+        std::vector<bool> visited(49, false);
+        std::queue<int> q;
+        q.push(i);
+        visited[i] = true;
+        dist[i][i] = 0;
+
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            for (int v = 0; v < 49; ++v) {
+                if (graph[u][v] and !visited[v]) {
+                    dist[i][v] = dist[i][u] + 1;
+                    q.push(v);
+                    visited[v] = true;
+                }
+            }
+        }
+    }
+
+}
+
+int main() {
+    int m;
+    std::cin >> m;
+    std::vector<std::vector<int>> graph(49);
+    
+    for (int i = 0; i < m; ++i) {
+        int a, b;
+        std::cin >> a >> b;
+        graph[a].push_back(b);
+        graph[b].push_back(a);
+    }
+
+}
